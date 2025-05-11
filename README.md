@@ -22,4 +22,4 @@ Os assets utilizados para esse pequeno projeto são da autoria de terceiros que 
 [pixel_frog]:https://itch.io/profile/pixelfrog-assets  
 [Phaser]:https://phaser.io
 [Phaser_url]:https://phaser.io
-[Phaser_shield]:http://www.w3.org/2000/svg
+[Phaser_shield]:https://phaser.io/
