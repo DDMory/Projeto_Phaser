@@ -1,6 +1,8 @@
 export class Preloader extends Phaser.Scene
 {
 
+    //TODO[10:05]: Create a enemy!!! + Put it on a scene
+
     constructor(){
         super('Preloader');
     }
