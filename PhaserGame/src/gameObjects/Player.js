@@ -1,11 +1,12 @@
 import ASSETS from '../assets.js'
 
-export default class Player extends Phaser.Physics.Arcade.Sprite{
+export class Player extends Phaser.Physics.Arcade.Sprite{
     
     constructor(scene, x, y, knightId) {
         super(scene, x, y, ASSETS.spritesheet.knight.key, knightId);
+        scene.add.existing(this);
 
-        this.spacebar = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+
         this.isAlive = true;
         this.play('idle_knight',true);
     }
