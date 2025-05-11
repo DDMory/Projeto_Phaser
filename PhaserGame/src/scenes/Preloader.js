@@ -1,8 +1,6 @@
 export class Preloader extends Phaser.Scene
 {
 
-    //TODO[10:05]: Create a enemy!!! + Put it on a scene
-
     constructor(){
         super('Preloader');
     }
@@ -13,7 +11,8 @@ export class Preloader extends Phaser.Scene
 
     create() {
 
-        //Player animations
+        //Animações
+            //Player
         this.anims.create({
             key: 'idle_knight',
             frames: this.anims.generateFrameNames('purple_knight', {start:0 ,end: 5}),
@@ -24,9 +23,18 @@ export class Preloader extends Phaser.Scene
 
         this.anims.create({
             key: 'attack_knight',
-            frames: this.anims.generateFrameNames('purple_knight', {prefix:'purple_knight', start:12 ,end: 17})
+            frames: this.anims.generateFrameNames('purple_knight', {start:12 ,end: 17}),
+            framerate: 20
         })
 
+        this.anims.create({
+            key: 'walking_knight',
+            frames: this.anims.generateFrameNames('purple_knight', {start:6 ,end: 11}),
+            yoyo: true,
+            framerate: 10
+        })
+
+        //Trocar de cena
         this.scene.start('Start')
     }
 
