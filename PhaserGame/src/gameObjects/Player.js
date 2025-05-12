@@ -9,13 +9,13 @@ export class Player extends Phaser.Physics.Arcade.Sprite{
         this.scene = scene;
         this.health = 20;
         this.isAlive = true;
-        this.doingAction = false;
         this.isAttacking = false;
         this.isDefending = false;
         this.isHealing = false;
         this.strength = 5
 
         this.originalX = x;
+        this.originalY = y;
         
         this.play('idle_knight');
     }
@@ -28,13 +28,11 @@ export class Player extends Phaser.Physics.Arcade.Sprite{
 
         if (!this.isAttacking) { // Adicione uma verificação para evitar interrupções
             this.isAttacking = true;
-            this.doingAction = true;
             this.play('attack_knight');
 
             // Adicione um listener para o evento de conclusão da animação de ataque
             this.once('animationcomplete-attack_knight', () => {
                 this.isAttacking = false;
-                this.doingAction = false;
                 this.play('idle_knight');
             });
         }
@@ -43,7 +41,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite{
 
     defense = () => {
         if (!this.isDefending) {
-            this.doingAction = true;
+            
             this.isDefending = true;
             const defenseDistance = 30; // Distância que o personagem vai recuar
             const defenseDuration = 600; // Duração da animação de recuo e retorno
@@ -58,17 +56,34 @@ export class Player extends Phaser.Physics.Arcade.Sprite{
                 yoyo: true,
                 onComplete: () => {
                     this.isDefending = false;
-                    this.doingAction = false;
                     this.play('idle_knight'); // Volta para a animação de idle ao terminar
                 }
             });
         }
     }
-
-    //TODO: Player.js - Heal method
-    heal = () =>{
-        if(!this.isHealing){
+    
+    heal = () => {
+        if (!this.isHealing) {
             this.isHealing = true;
+
+            const meatSprite = this.scene.add.sprite(this.originalX, this.originalY - 100, 'meat');
+            meatSprite.play('meat');
+
+            this.scene.tweens.add({
+                targets: meatSprite,
+                y: this.originalY,
+                duration: 600,
+                ease: 'Linear',
+                onComplete: () => {
+                    if(this.health < 20)
+                        this.health += 5;
+                    else
+                        this.health = 20
+
+                    meatSprite.destroy();
+                    this.isHealing = false;
+                }
+            });
         }
     }
 

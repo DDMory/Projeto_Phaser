@@ -6,7 +6,8 @@ export class Preloader extends Phaser.Scene
     }
    
     preload(){
-        this.load.spritesheet('purple_knight', '../../assets/Warrior_Purple.png', { frameWidth: 192, frameHeight: 192 })
+        this.load.spritesheet('purple_knight', '../../assets/Warrior_Purple.png', { frameWidth: 192, frameHeight: 192 }),
+        this.load.spritesheet('meat','../../assets/M_Spawn.png', {frameWidth: 128, frameHeight: 128 })
     }
 
     create() {
@@ -32,6 +33,15 @@ export class Preloader extends Phaser.Scene
             frames: this.anims.generateFrameNames('purple_knight', {start:6 ,end: 11}),
             yoyo: true,
             framerate: 10
+        })
+
+            //Meat
+        this.anims.create({
+            key: 'meat',
+            frames: this.anims.generateFrameNames('meat', {start:0 ,end: 6}),
+            yoyo: true,
+            frameRate: 14
+            
         })
 
         //Trocar de cena
