@@ -1,42 +1,40 @@
 import ASSETS from '../assets.js'
 
-export class Player extends Phaser.Physics.Arcade.Sprite{
+export class Enemy extends Phaser.Physics.Arcade.Sprite{
     
-    constructor(scene, x, y, knightId) {
-        super(scene, x, y, ASSETS.spritesheet.knight.key, knightId);
+    constructor(scene, x, y, enemyID){
+        super(scene, x, y, ASSETS.spritesheet.torch.key, enemyID);
         scene.add.existing(this);
 
         this.scene = scene;
-        this.health = 20;
-        this.isAlive = true;
+        this.originalX = x;
+        this.originalY = y;
         this.isAttacking = false;
         this.isDefending = false;
         this.isHealing = false;
-        this.strength = 5
 
-        this.originalX = x;
-        this.originalY = y;
+        this.health = 10;
         
-        this.play('idle_knight');
+        this.play('idle_torch');
     }
 
     preUpdate(time, delta){
         super.preUpdate(time, delta);
     }
 
-    attack=(enemyX) => {
-        if (!this.isAttacking) { // Adicione uma verificação para evitar interrupções
+    attack=(playerX) => {
+        if (!this.isAttacking) {
             this.isAttacking = true;
             
             this.scene.tweens.add({
                 targets: this,
-                x: enemyX - 30,
+                x: playerX + 300,
                 duration: 800 / 2,
                 ease: 'Sine.easeInOut',
                 onComplete: () => {
-                    this.play('attack_knight');
+                    this.play('attack_torch');
 
-                    this.once('animationcomplete-attack_knight', () => {
+                    this.once('animationcomplete-attack_torch', () => {
                         this.scene.tweens.add({
                             targets: this,
                             x: this.originalX,
@@ -48,10 +46,9 @@ export class Player extends Phaser.Physics.Arcade.Sprite{
                 }
             });
 
-            // Adicione um listener para o evento de conclusão da animação de ataque
-            this.once('animationcomplete-attack_knight', () => {
+            this.once('animationcomplete-attack_torch', () => {
                 this.isAttacking = false;
-                this.play('idle_knight');
+                this.play('idle_torch');
             });
         }
 
@@ -61,24 +58,23 @@ export class Player extends Phaser.Physics.Arcade.Sprite{
         if (!this.isDefending) {
             
             this.isDefending = true;
-            const defenseDuration = 600; // Duração da animação de recuo e retorno
 
-            this.play('walking_knight'); // Inicia a animação de andar
+            this.play('walking_torch');
 
             this.scene.tweens.add({
                 targets: this,
-                x: this.x - 100,
-                duration: defenseDuration / 2,
+                x: this.x + 100,
+                duration: 400,
                 ease: 'Sine.easeInOut',
                 yoyo: true,
                 onComplete: () => {
                     this.isDefending = false;
-                    this.play('idle_knight'); // Volta para a animação de idle ao terminar
+                    this.play('idle_torch'); // Volta para a animação de idle ao terminar
                 }
             });
         }
     }
-    
+
     heal = () => {
         if (!this.isHealing) {
             this.isHealing = true;
@@ -92,20 +88,19 @@ export class Player extends Phaser.Physics.Arcade.Sprite{
                 duration: 600,
                 ease: 'Linear',
                 onComplete: () => {
-                    if(this.health < 20)
+                    if(this.health < 10)
                         this.health += 5;
                     else
-                        this.health = 20
-
-                    meatSprite.destroy();
+                        this.health = 10;
+                    
                     this.isHealing = false;
+                    meatSprite.destroy();
+                    
                 }
             });
+            
+            
         }
-    }
-
-    takeHit = () => {
-        //TODO: Taking hit from enemy
     }
 
 }
